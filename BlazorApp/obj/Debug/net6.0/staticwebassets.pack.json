@@ -5,12 +5,24 @@
       "PackagePath": "staticwebassets\\BlazorApp.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\meowk\\Desktop\\BlazorApp\\BlazorApp\\wwwroot\\css\\animate.css",
+      "PackagePath": "staticwebassets\\css\\animate.css"
+    },
+    {
       "Id": "C:\\Users\\meowk\\Desktop\\BlazorApp\\BlazorApp\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
       "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css"
     },
     {
       "Id": "C:\\Users\\meowk\\Desktop\\BlazorApp\\BlazorApp\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
       "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\meowk\\Desktop\\BlazorApp\\BlazorApp\\wwwroot\\css\\fontawesome-all.min.css",
+      "PackagePath": "staticwebassets\\css\\fontawesome-all.min.css"
+    },
+    {
+      "Id": "C:\\Users\\meowk\\Desktop\\BlazorApp\\BlazorApp\\wwwroot\\css\\lightbox.min.css",
+      "PackagePath": "staticwebassets\\css\\lightbox.min.css"
     },
     {
       "Id": "C:\\Users\\meowk\\Desktop\\BlazorApp\\BlazorApp\\wwwroot\\css\\open-iconic\\FONT-LICENSE",
@@ -47,6 +59,14 @@
     {
       "Id": "C:\\Users\\meowk\\Desktop\\BlazorApp\\BlazorApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.woff",
       "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.woff"
+    },
+    {
+      "Id": "C:\\Users\\meowk\\Desktop\\BlazorApp\\BlazorApp\\wwwroot\\css\\owl.carousel.min.css",
+      "PackagePath": "staticwebassets\\css\\owl.carousel.min.css"
+    },
+    {
+      "Id": "C:\\Users\\meowk\\Desktop\\BlazorApp\\BlazorApp\\wwwroot\\css\\responsive.css",
+      "PackagePath": "staticwebassets\\css\\responsive.css"
     },
     {
       "Id": "C:\\Users\\meowk\\Desktop\\BlazorApp\\BlazorApp\\wwwroot\\css\\site.css",
