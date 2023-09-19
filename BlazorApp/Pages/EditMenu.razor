@@ -1,7 +1,9 @@
 ﻿@page "/editmenu"
 
 <h3>Takodachi Restaurant</h3>
+@using Microsoft.EntityFrameworkCore
 @using BlazorApp.Data
+@inject IDbContextFactory<RestaurantDbContext> DbFactory
 
 <p>Infinite Ultimate Super better Sugoi Food , Delicious then dog poop</p>
 
@@ -60,16 +62,11 @@
     </table>
 </EditForm>
 
+<button type="button" @onclick="AddData">@AddButtonText</button>
+<button type="button" @onclick="RemoveData" @attributes="RemoveButtonAttrs">Remove</button>
 
 @code {
-    private RestaurantFood[] Foods = new RestaurantFood[]
-    {
-        new RestaurantFood { Name = "Pork Rinds", Description = "Delicious Thai dish", Price = 20, Score = 7 },
-        new RestaurantFood { Name = "Somtam JoeJoe", Description = "Spicy and tangy salad", Price = 45, Score = 9 },
-        new RestaurantFood { Name = "Heaven Chicken 5 Star", Description = "Crispy fried chicken", Price = 40, Score = 10 },
-        new RestaurantFood { Name = "Pad thai", Description = "Classic Thai noodle dish", Price = 60, Score = 8 },
-        new RestaurantFood { Name = "Minced pork Mama", Description = "Savory minced pork(Best Food)", Price = 25, Score = 10 },
-    };
+    private List<RestaurantFood> foods = new();
     private RestaurantFood editModel = new RestaurantFood();
 
     private int _selectedIndex;
@@ -79,7 +76,7 @@
         set
         {
             _selectedIndex = value;
-            editModel = Foods[_selectedIndex];
+            editModel = foods[_selectedIndex];
         }
     }
 
@@ -87,5 +84,58 @@
     {
         base.OnInitialized();
         SelectedIndex = 0;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var dbContext = await DbFactory.CreateDbContextAsync();
+        await dbContext.Database.EnsureCreatedAsync();
+        foods = dbContext.RestaurantFoods.ToList();
+        if (foods.Count > 0 )
+        {
+            SelectedIndex = 0;
+        }
+    }
+
+    private bool _isNewAdd = false;
+    private string AddButtonText = "Add";
+
+    private bool IsNewAdd
+    {
+        get => _isNewAdd;
+        set
+        {
+            _isNewAdd = value;
+            AddButtonText = (!_isNewAdd) ? "Add" : "Save";
+            RemoveButtonAttrs["disabled"] = (!_isNewAdd) ? false : true ;
+        }
+    }
+
+    private async void AddData()
+    {
+        if (!IsNewAdd)
+        {
+            editModel = new();
+            IsNewAdd = true;
+            return;
+        }
+        using var dbContext = await DbFactory.CreateDbContextAsync();
+        var newData = dbContext.RestaurantFoods.Add(editModel);
+        await dbContext.SaveChangesAsync();
+        IsNewAdd = false;
+        foods = dbContext.RestaurantFoods.ToList();
+    }
+
+    private Dictionary<string, object> RemoveButtonAttrs = new()
+    {
+        {"disabled", false}
+    };
+
+    private async void RemoveData()
+    {
+        using var dbContext = await DbFactory.CreateDbContextAsync();
+        var newData = dbContext.RestaurantFoods.Remove(editModel);
+        await dbContext.SaveChangesAsync();
+        foods = dbContext.RestaurantFoods.ToList();
     }
 }
