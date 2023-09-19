@@ -1,0 +1,91 @@
+﻿@page "/editmenu"
+
+<h3>Takodachi Restaurant</h3>
+@using BlazorApp.Data
+
+<p>Infinite Ultimate Super better Sugoi Food , Delicious then dog poop</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var food in Foods)
+        {
+            <tr>
+                <td>@food.Name</td>
+                <td>@food.Description</td>
+                <td>@food.Price Baht</td>
+                <td>@food.Score / 10</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<EditForm Model="@editModel">
+    Select:
+    <InputSelect @bind-Value="@SelectedIndex">
+        @{
+            int count = 0;
+            @foreach (var data in Foods)
+            {
+                <option value="@count">@data.Name</option>
+                count++;
+            }
+        }
+    </InputSelect>
+
+    <table>
+        <tr>
+            <td>Name:</td>
+            <td><InputText id="Name" @bind-Value="editModel.Name" /></td>
+        </tr>
+        <tr>
+            <td>Description:</td>
+            <td><InputText id="description" @bind-Value="editModel.Description" /></td>
+        </tr>
+        <tr>
+            <td>Price:</td>
+            <td><InputNumber id="Price" @bind-Value="editModel.Price" min="0" /></td>
+        </tr>
+        <tr>
+            <td>Score:</td>
+            <td><InputNumber id="Score" @bind-Value="editModel.Score" min="0" max="10" /></td>
+        </tr>
+    </table>
+</EditForm>
+
+
+@code {
+    private RestaurantFood[] Foods = new RestaurantFood[]
+    {
+        new RestaurantFood { Name = "Pork Rinds", Description = "Delicious Thai dish", Price = 20, Score = 7 },
+        new RestaurantFood { Name = "Somtam JoeJoe", Description = "Spicy and tangy salad", Price = 45, Score = 9 },
+        new RestaurantFood { Name = "Heaven Chicken 5 Star", Description = "Crispy fried chicken", Price = 40, Score = 10 },
+        new RestaurantFood { Name = "Pad thai", Description = "Classic Thai noodle dish", Price = 60, Score = 8 },
+        new RestaurantFood { Name = "Minced pork Mama", Description = "Savory minced pork(Best Food)", Price = 25, Score = 10 },
+    };
+    private RestaurantFood editModel = new RestaurantFood();
+
+    private int _selectedIndex;
+    private int SelectedIndex
+    {
+        get => _selectedIndex;
+        set
+        {
+            _selectedIndex = value;
+            editModel = Foods[_selectedIndex];
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        SelectedIndex = 0;
+    }
+}
