@@ -10,6 +10,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th>FoodId</th>
             <th>Name</th>
             <th>Description</th>
             <th>Price</th>
@@ -17,9 +18,10 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var food in Foods)
+        @foreach (var food in foods)
         {
             <tr>
+                <td>@food.Id</td>
                 <td>@food.Name</td>
                 <td>@food.Description</td>
                 <td>@food.Price Baht</td>
@@ -29,37 +31,46 @@
     </tbody>
 </table>
 
-<EditForm Model="@editModel">
+<EditForm Model="@editModel" OnValidSubmit="@UpdateValidData">
     Select:
     <InputSelect @bind-Value="@SelectedIndex">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+            <option value="">Select Food</option>
         @{
             int count = 0;
-            @foreach (var data in Foods)
+            @foreach (var data in foods)
             {
                 <option value="@count">@data.Name</option>
                 count++;
             }
         }
     </InputSelect>
-
-    <table>
-        <tr>
-            <td>Name:</td>
-            <td><InputText id="Name" @bind-Value="editModel.Name" /></td>
-        </tr>
-        <tr>
-            <td>Description:</td>
-            <td><InputText id="description" @bind-Value="editModel.Description" /></td>
-        </tr>
-        <tr>
-            <td>Price:</td>
-            <td><InputNumber id="Price" @bind-Value="editModel.Price" min="0" /></td>
-        </tr>
-        <tr>
-            <td>Score:</td>
-            <td><InputNumber id="Score" @bind-Value="editModel.Score" min="0" max="10" /></td>
-        </tr>
-    </table>
+        <table>
+            <tr>
+                <td>Name:</td>
+                <td><InputText id="Name" @bind-Value="editModel.Name" /></td>
+            </tr>
+            <tr>
+                <td>Description:</td>
+                <td><InputText id="description" @bind-Value="editModel.Description" /></td>
+            </tr>
+            <tr>
+                <td>Price:</td>
+                <td><InputNumber id="Price" @bind-Value="editModel.Price" min="0" /></td>
+            </tr>
+            <tr>
+                <td>Score:</td>
+                <td><InputNumber id="Score" @bind-Value="editModel.Score" min="0" max="10" /></td>
+            </tr>
+        </table>
+   
+    <div>
+        @if(AddButtonText != "Save")
+        {
+          <button type="submit" @attributes="UpdateButtonAttrs">Update</button>
+        }
+    </div>
 </EditForm>
 
 <button type="button" @onclick="AddData">@AddButtonText</button>
@@ -78,12 +89,6 @@
             _selectedIndex = value;
             editModel = foods[_selectedIndex];
         }
-    }
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        SelectedIndex = 0;
     }
 
     protected override async Task OnInitializedAsync()
@@ -131,11 +136,28 @@
         {"disabled", false}
     };
 
+    private Dictionary<string, object> UpdateButtonAttrs = new()
+    {
+        {"disabled", false} 
+    };
+
     private async void RemoveData()
     {
         using var dbContext = await DbFactory.CreateDbContextAsync();
         var newData = dbContext.RestaurantFoods.Remove(editModel);
         await dbContext.SaveChangesAsync();
         foods = dbContext.RestaurantFoods.ToList();
+    }
+
+    private async void UpdateValidData()
+    {
+        using var dbContext = await DbFactory.CreateDbContextAsync();
+        var selModel = foods[SelectedIndex];
+        selModel.Name = editModel.Name;
+        selModel.Description = editModel.Description;
+        selModel.Price = editModel.Price;
+        selModel.Score = editModel.Score;
+        var newData = dbContext.RestaurantFoods.Update(selModel);
+        await dbContext.SaveChangesAsync();
     }
 }

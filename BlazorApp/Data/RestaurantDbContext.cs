@@ -7,8 +7,7 @@ namespace BlazorApp.Data
         public DbSet<RestaurantFood> RestaurantFoods { get; set; }
     
         public RestaurantDbContext(DbContextOptions options) : base(options)
-        {
-           
+        {          
         }
     }
 }
